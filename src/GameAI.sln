@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.Core", "GameAI.Core\GameAI.Core.csproj", "{B4B9F676-7C6D-4540-B325-09B5021130EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.Tests", "GameAI.Tests\GameAI.Tests.csproj", "{D5E875F0-DFB7-4AB0-9254-55076FD275DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
