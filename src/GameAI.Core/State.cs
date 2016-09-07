@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GameAI.Core
 {
-    public class State
+    public abstract class State
     {
-        public Estimate? Estimate { get; set; }
+        public Estimate Estimate { get; set; }
 
         public Player NextMovePlayer { get; set; }
     }

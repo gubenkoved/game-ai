@@ -8,8 +8,5 @@ namespace GameAI.Core
 {
     public abstract class Move
     {
-        public abstract State Do(State state);
-
-        public abstract State Undo(State state);
     }
 }

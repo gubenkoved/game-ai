@@ -50,8 +50,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="TicTacToeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameAI.Core\GameAI.Core.csproj">
+      <Project>{b4b9f676-7c6d-4540-b325-09b5021130ec}</Project>
+      <Name>GameAI.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameAI.TicTacToe\GameAI.TicTacToe.csproj">
+      <Project>{a24b3280-e676-482b-8171-76b9a884996d}</Project>
+      <Name>GameAI.TicTacToe</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

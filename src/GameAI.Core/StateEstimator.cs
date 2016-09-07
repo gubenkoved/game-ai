@@ -10,4 +10,15 @@ namespace GameAI.Core
     {
         public abstract Estimate GetEstimate(State state);
     }
+
+    public abstract class StateEstimator2<TState> : StateEstimator
+        where TState : State
+    {
+        public sealed override Estimate GetEstimate(State state)
+        {
+            return GetEstimate2(state as TState);
+        }
+
+        public abstract Estimate GetEstimate2(TState state);
+    }
 }
