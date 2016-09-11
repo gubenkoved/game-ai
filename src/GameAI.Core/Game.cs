@@ -35,9 +35,8 @@ namespace GameAI.Core
         {
             UndoMoveImpl(move);
 
-            Estimate nextStateEstimate = Estimator.GetEstimate(State);
-
-            State.Estimate = nextStateEstimate;
+            //Estimate nextStateEstimate = Estimator.GetEstimate(State);
+            //State.Estimate = nextStateEstimate;
         }
         #endregion
 
@@ -97,8 +96,8 @@ namespace GameAI.Core
             UndoMoveImpl2(move as TMove);
         }
 
-        public abstract void DoMoveImpl2(TMove move);
+        protected abstract void DoMoveImpl2(TMove move);
 
-        public abstract void UndoMoveImpl2(TMove move);
+        protected abstract void UndoMoveImpl2(TMove move);
     }
 }

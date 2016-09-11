@@ -9,35 +9,58 @@ namespace GameAI.Core.Engines.BruteForce
 {
     public class BruteForceAIEngine : AIEngine
     {
-        public int MaxDepth { get; set; } = 10;
+        public int MaxDepth = 10;
 
-        public override Move GetBestMove(Game game)
+        public int MovesChecked = 0;
+
+        public override EstimatedMove GetBestMove(Game game)
         {
+            MovesChecked = 0;
+
             Move bestMove;
             Estimate bestEstimate;
             GetBestMoveImpl(game, 1, out bestMove, out bestEstimate);
 
-            return bestMove;
+            Trace.WriteLine($"Moves checked: {MovesChecked}");
+
+            return new EstimatedMove()
+            {
+                Estimate = bestEstimate,
+                Move = bestMove,
+            };
         }
 
         private void GetBestMoveImpl(Game game, int depth, out Move bestMove, out Estimate bestEstimate)
         {
-            bool maximaize = game.State.NextMovePlayer == Player.A;
+            bool isMaximizeStage = game.State.NextMovePlayer == Player.A;
 
             Move curBestMove = null;
-            Estimate curBestEstimate = maximaize ? Estimate.Min : Estimate.Max;
+            Estimate curBestEstimate = isMaximizeStage ? Estimate.Min : Estimate.Max;
 
             foreach (Move move in game.GetAllowedMoves())
             {
+                MovesChecked += 1;
+
                 game.DoMove(move);
 
                 Estimate estimate = game.State.Estimate;
+
+                // fore AI to win faster
+                if (estimate.IsTerminate && !estimate.IsZero)
+                {
+                    estimate.Value += depth * (isMaximizeStage ? -1 : +1);
+                }
+
+                if (depth < 3)
+                {
+                    Trace.WriteLine($"{Tab(depth - 1)}Consider {move}");
+                }
 
                 if (estimate.IsTerminate || depth == MaxDepth)
                 {
                     // no longer go deeper
 
-                    UpdateBestMove(maximaize, move, estimate, ref curBestMove, ref curBestEstimate);
+                    UpdateBestMove(isMaximizeStage, move, estimate, ref curBestMove, ref curBestEstimate);
                 } else 
                 {
                     // go deeper
@@ -46,7 +69,7 @@ namespace GameAI.Core.Engines.BruteForce
 
                     GetBestMoveImpl(game, depth + 1, out bestMoveInternal, out bestEstimateInternal);
 
-                    UpdateBestMove(maximaize, bestMoveInternal, bestEstimateInternal, ref curBestMove, ref curBestEstimate);
+                    UpdateBestMove(isMaximizeStage, move, bestEstimateInternal, ref curBestMove, ref curBestEstimate);
                 }
 
                 game.UndoMove(move);
@@ -55,7 +78,8 @@ namespace GameAI.Core.Engines.BruteForce
             bestMove = curBestMove;
             bestEstimate = curBestEstimate;
 
-            Trace.WriteLine($"D: {depth}; BM: {bestMove}; E: {bestEstimate}");
+            if (depth <=  3)
+                Trace.WriteLine($"{Tab(depth-1)}RET: {depth}; BM: {bestMove}; E: {bestEstimate} ({(isMaximizeStage ? "max" : "min")})");
         }
 
         private void UpdateBestMove(bool maximaize,
@@ -85,6 +109,11 @@ namespace GameAI.Core.Engines.BruteForce
                     bestMove = move;
                 }
             }
+        }
+
+        private string Tab(int n)
+        {
+            return new string('\t', n);
         }
     }
 }

@@ -11,6 +11,13 @@ namespace GameAI.Core
         public int Value;
         public bool IsTerminate;
 
+        public bool IsZero
+        { get
+            {
+                return Value == 0;
+            }
+        }
+
         public static Estimate Zero
         {
             get { return new Estimate() { Value = 0 }; }
@@ -18,12 +25,12 @@ namespace GameAI.Core
 
         public static Estimate Max
         {
-            get { return new Estimate() { Value = int.MaxValue }; }
+            get { return new Estimate() { Value = 1000000 }; }
         }
 
         public static Estimate Min
         {
-            get { return new Estimate() { Value = int.MinValue }; }
+            get { return new Estimate() { Value = -1000000 }; }
         }
 
         public static Estimate ZeroTerminate
@@ -33,12 +40,12 @@ namespace GameAI.Core
 
         public static Estimate MaxTerminate
         {
-            get { return new Estimate() { Value = int.MaxValue, IsTerminate = true, }; }
+            get { return new Estimate() { Value = 1000000, IsTerminate = true, }; }
         }
 
         public static Estimate MinTerminate
         {
-            get { return new Estimate() { Value = int.MinValue, IsTerminate = true, }; }
+            get { return new Estimate() { Value = -1000000, IsTerminate = true, }; }
         }
 
         public static bool operator >(Estimate left, Estimate right)

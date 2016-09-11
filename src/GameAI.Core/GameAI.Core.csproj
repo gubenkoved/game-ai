@@ -43,6 +43,7 @@
     <Compile Include="AIEngine.cs" />
     <Compile Include="Engines\BruteForce\BruteForceAIEngine.cs" />
     <Compile Include="Estimate.cs" />
+    <Compile Include="EstimatedMove.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="Player.cs" />

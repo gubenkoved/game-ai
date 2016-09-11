@@ -46,7 +46,7 @@ namespace GameAI.TicTacToe
             };
         }
 
-        public override void DoMoveImpl2(TicTacToeMove move)
+        protected override void DoMoveImpl2(TicTacToeMove move)
         {
             Contract.Requires(State.Board[move.X * Size + move.Y] == null);
             Contract.Ensures(State.Board[move.X * Size + move.Y] != null);
@@ -57,12 +57,13 @@ namespace GameAI.TicTacToe
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
         }
 
-        public override void UndoMoveImpl2(TicTacToeMove move)
+        protected override void UndoMoveImpl2(TicTacToeMove move)
         {
             Contract.Requires(State.Board[move.X * Size + move.Y] != null);
             Contract.Ensures(State.Board[move.X * Size + move.Y] == null);
 
             State.Board[move.X * Size + move.Y] = null;
+            State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
         }
     }
 }
