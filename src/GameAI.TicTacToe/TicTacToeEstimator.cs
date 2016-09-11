@@ -34,17 +34,17 @@ namespace GameAI.TicTacToe
         {
             foreach (var line in _lines)
             {
-                bool? takenBy = IsLineTaken(state, line);
+                Player? takenBy = IsLineTaken(state, line);
 
                 if (takenBy != null)
                 {
-                    return takenBy == true
+                    return takenBy == Player.A
                         ? Estimate.MaxTerminate
                         : Estimate.MinTerminate;
                 }
             }
 
-            if (state.Board.All(x => x != null))
+            if (IsBoardFull(state))
             {
                 return Estimate.ZeroTerminate;
             }
@@ -53,12 +53,28 @@ namespace GameAI.TicTacToe
             return Estimate.Zero;
         }
 
-        public bool? IsLineTaken(TicTacToeState state, Tuple<int, int>[] line)
+        public bool IsBoardFull(TicTacToeState state)
         {
-            bool? takenByCandidate = null;
+            for (int x = 0; x < state.Size; x++)
+            {
+                for (int y = 0; y < state.Size; y++)
+                {
+                    if (state.GetCell(x, y) == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public Player? IsLineTaken(TicTacToeState state, Tuple<int, int>[] line)
+        {
+            Player? takenByCandidate = null;
             foreach (var position in line)
             {
-                bool? cur = state.Board[position.Item1 * 3 + position.Item2];
+                Player? cur = state.GetCell(position.Item1, position.Item2);
 
                 if (cur == null)
                 {

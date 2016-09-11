@@ -75,6 +75,11 @@ namespace GameAI.Core.Engines.BruteForce
                 game.UndoMove(move);
             }
 
+            if (curBestMove == null)
+            {
+                throw new InvalidOperationException("No moves found");
+            }
+
             bestMove = curBestMove;
             bestEstimate = curBestEstimate;
 

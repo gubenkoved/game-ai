@@ -9,8 +9,6 @@ namespace GameAI.Core
     public abstract class Game
     {
         #region Properties
-        public virtual StateEstimator Estimator { get; set; }
-
         public virtual State State { get; set; }
         #endregion
 
@@ -25,18 +23,11 @@ namespace GameAI.Core
         public void DoMove(Move move)
         {
             DoMoveImpl(move);
-
-            Estimate nextStateEstimate = Estimator.GetEstimate(State);
-
-            State.Estimate = nextStateEstimate;
         }
 
         public void UndoMove(Move move)
         {
             UndoMoveImpl(move);
-
-            //Estimate nextStateEstimate = Estimator.GetEstimate(State);
-            //State.Estimate = nextStateEstimate;
         }
         #endregion
 
@@ -55,24 +46,10 @@ namespace GameAI.Core
         #endregion
     }
 
-    public abstract class Game2<TState, TMove, TEstimator> : Game
+    public abstract class Game2<TState, TMove> : Game
         where TState : State
         where TMove : Move
-        where TEstimator : StateEstimator2<TState>
     {
-        public Game2(TEstimator estimator)
-        {
-            base.Estimator = estimator;
-        }
-
-        public new TEstimator Estimator
-        {
-            get
-            {
-                return base.Estimator as TEstimator;
-            }
-        }
-
         public new TState State
         {
             get

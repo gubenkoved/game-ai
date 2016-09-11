@@ -9,27 +9,28 @@ using System.Threading.Tasks;
 namespace GameAI.TicTacToe
 {
     public class TicTacToeGame
-        : Game2<TicTacToeState, TicTacToeMove, TicTacToeEstimator>
+        : Game2<TicTacToeState, TicTacToeMove>
     {
+        private TicTacToeEstimator Estimator = new TicTacToeEstimator();
+
         public const int Size = 3;
 
-        public TicTacToeGame(TicTacToeEstimator estimator)
-            : base(estimator)
+        public TicTacToeGame()
         {
         }
 
         public override IEnumerable<Move> GetAllowedMoves()
         {
-            for (int i = 0; i < Size; i++)
+            for (int x = 0; x < Size; x++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int y = 0; y < Size; y++)
                 {
-                    if (State.Board[i * Size + j] == null)
+                    if (State.GetCell(x, y) == null)
                     {
                         yield return new TicTacToeMove()
                         {
-                            X = i,
-                            Y = j,
+                            X = x,
+                            Y = y,
                         };
                     }
                 }
@@ -38,9 +39,8 @@ namespace GameAI.TicTacToe
 
         protected override State GetIntitialState()
         {
-            return new TicTacToeState()
+            return new TicTacToeState(Size)
             {
-                Board          = new bool?[Size * Size],
                 Estimate       = Estimate.Zero,
                 NextMovePlayer = Player.A,
             };
@@ -48,21 +48,17 @@ namespace GameAI.TicTacToe
 
         protected override void DoMoveImpl2(TicTacToeMove move)
         {
-            Contract.Requires(State.Board[move.X * Size + move.Y] == null);
-            Contract.Ensures(State.Board[move.X * Size + move.Y] != null);
-
             bool val = State.NextMovePlayer == Player.A ? true : false;
 
-            State.Board[move.X * Size + move.Y] = val;
+            State.SetCell(move.X, move.Y, State.NextMovePlayer);
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
+
+            State.Estimate = Estimator.GetEstimate2(State);
         }
 
         protected override void UndoMoveImpl2(TicTacToeMove move)
         {
-            Contract.Requires(State.Board[move.X * Size + move.Y] != null);
-            Contract.Ensures(State.Board[move.X * Size + move.Y] == null);
-
-            State.Board[move.X * Size + move.Y] = null;
+            State.SetCell(move.X, move.Y, null);
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
         }
     }

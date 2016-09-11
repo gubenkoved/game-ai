@@ -8,8 +8,8 @@ namespace GameAI.Core
 {
     public abstract class State
     {
-        public Estimate Estimate { get; set; }
+        public Estimate Estimate;
 
-        public Player NextMovePlayer { get; set; }
+        public Player NextMovePlayer;
     }
 }

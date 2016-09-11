@@ -9,13 +9,44 @@ namespace GameAI.TicTacToe
 {
     public class TicTacToeState : State
     {
-        public bool?[] Board;
+        public readonly int Size;
+        private readonly bool?[] Board;
 
-        public void SetPlayerMark(Player player, int x, int y)
+        public TicTacToeState(int size)
         {
-            Board[x * 3 + y] = player == Player.A
-                ? true
-                : false;
+            Size = size;
+            Board = new bool?[size * size];
+        }
+
+        public void SetCell(int x, int y, Player? player)
+        {
+            bool? val = null;
+
+            if (player != null)
+            {
+                val = (player == Player.A ? true : false);
+            }
+
+            Board[y * Size + x] = val;
+        }
+
+        public Player? GetCell(int x, int y)
+        {
+            bool? val = Board[y * Size + x];
+
+            if (val == null)
+            {
+                return null;
+            }
+
+            if (val == true)
+            {
+                return Player.A;
+            }
+            else
+            {
+                return Player.B;
+            }
         }
     }
 }
