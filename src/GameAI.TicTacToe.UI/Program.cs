@@ -25,9 +25,11 @@ namespace GameAI.TicTacToe.UI
                     Console.Write("MOVE > ");
                     string userMove = Console.ReadLine();
 
-                    Match match = Regex.Match(userMove, "(?<x>[0-9]) (?<y>[0-9])");
+                    IEnumerable<TicTacToeMove> allowedMoves = game.GetAllowedMoves().OfType<TicTacToeMove>();
 
-                    if (match != null)
+                    Match match = Regex.Match(userMove, "^(?<x>[0-9]) ?(?<y>[0-9])$");
+
+                    if (match != null && match.Success)
                     {
                         int x = int.Parse(match.Groups["x"].Value);
                         int y = int.Parse(match.Groups["y"].Value);
@@ -38,10 +40,17 @@ namespace GameAI.TicTacToe.UI
                             Y = y,
                         };
 
-                        game.DoMove(move);
+                        if (allowedMoves.Contains(move))
+                        {
+                            game.DoMove(move);
+                        } else
+                        {
+                            Console.WriteLine("Move is not allowed");
+                            continue;
+                        }
                     } else
                     {
-                        Console.WriteLine("Bad move");
+                        Console.WriteLine("Unable to understand move -- use \"X Y\" syntax (e.g. 0 0)");
                         continue;
                     }
                 } else
@@ -51,7 +60,7 @@ namespace GameAI.TicTacToe.UI
 
                     EstimatedMove aiMove = ai.GetBestMove(game);
 
-                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.Move}");
+                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.Move}; MOVES CHKD: {ai.MovesChecked}");
 
                     game.DoMove(aiMove.Move);
                 }
