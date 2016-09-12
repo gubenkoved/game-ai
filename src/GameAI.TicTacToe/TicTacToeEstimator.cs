@@ -9,25 +9,44 @@ namespace GameAI.TicTacToe
 {
     public class TicTacToeEstimator : StateEstimator2<TicTacToeState>
     {
-        private Tuple<int, int>[][] _lines;
-        public TicTacToeEstimator()
+        private struct P
         {
-            _lines = new[]
+            public int X;
+            public int Y;
+
+            public P(int x, int y)
             {
-                // horizontal lines
-                new [] { Tuple.Create(0, 0), Tuple.Create(1, 0), Tuple.Create(2, 0), },
-                new [] { Tuple.Create(0, 1), Tuple.Create(1, 1), Tuple.Create(2, 1), },
-                new [] { Tuple.Create(0, 2), Tuple.Create(1, 2), Tuple.Create(2, 2), },
+                X = x;
+                Y = y;
+            }
+        }
+
+        private P[][] _lines;
+        public TicTacToeEstimator(int n)
+        {
+            // n horizontals + n verticals + 2 diagonals
+            _lines = Enumerable.Range(0, n + n + 2)
+                .Select(_ => new P[n])
+                .ToArray();
+
+            for (int z = 0; z < n; z++)
+            {
+                // horizontal
+                for (int k = 0; k < n; k++)
+                {
+                    _lines[k][z] = new P(z, k);
+                }
 
                 // vertical
-                new [] { Tuple.Create(0, 0), Tuple.Create(0, 1), Tuple.Create(0, 2), },
-                new [] { Tuple.Create(1, 0), Tuple.Create(1, 1), Tuple.Create(1, 2), },
-                new [] { Tuple.Create(2, 0), Tuple.Create(2, 1), Tuple.Create(2, 2), },
+                for (int k = 0; k < n; k++)
+                {
+                    _lines[k + n][z] = new P(k, z);
+                }
 
-                // digaonals
-                new [] { Tuple.Create(0, 0), Tuple.Create(1, 1), Tuple.Create(2, 2), },
-                new [] { Tuple.Create(2, 0), Tuple.Create(1, 1), Tuple.Create(0, 2), },
-            };
+                // diagonals
+                _lines[n + n][z] = new P(z, z);
+                _lines[n + n + 1][z] = new P(z, n - z - 1);
+            }
         }
 
         public override Estimate GetEstimate2(TicTacToeState state)
@@ -53,7 +72,7 @@ namespace GameAI.TicTacToe
             return Estimate.Zero;
         }
 
-        public bool IsBoardFull(TicTacToeState state)
+        private bool IsBoardFull(TicTacToeState state)
         {
             for (int x = 0; x < state.Size; x++)
             {
@@ -69,12 +88,12 @@ namespace GameAI.TicTacToe
             return true;
         }
 
-        public Player? IsLineTaken(TicTacToeState state, Tuple<int, int>[] line)
+        private Player? IsLineTaken(TicTacToeState state, P[] line)
         {
             Player? takenByCandidate = null;
-            foreach (var position in line)
+            foreach (var p in line)
             {
-                Player? cur = state.GetCell(position.Item1, position.Item2);
+                Player? cur = state.GetCell(p.X, p.Y);
 
                 if (cur == null)
                 {

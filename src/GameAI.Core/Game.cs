@@ -14,7 +14,6 @@ namespace GameAI.Core
 
         public Game()
         {
-            State = GetIntitialState();
         }
 
         #region Public methods
@@ -32,8 +31,6 @@ namespace GameAI.Core
         #endregion
 
         #region Protected methods
-        protected abstract State GetIntitialState();
-
         protected abstract void DoMoveImpl(Move move);
         protected abstract void UndoMoveImpl(Move move);
 
