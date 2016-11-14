@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameAI.Core.Utils;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -32,10 +33,13 @@ namespace GameAI.Core.Engines.BruteForce
 
         private void GetBestMoveImpl(Game game, int depth, out Move bestMove, out Estimate bestEstimate)
         {
-            bool isMaximizeStage = game.State.NextMovePlayer == Player.Maximizing;
+            Player player = game.State.NextMovePlayer;
+            bool isMaximizeStage = player == Player.Maximizing;
 
             Move curBestMove = null;
-            Estimate curBestEstimate = isMaximizeStage ? Estimate.Min : Estimate.Max;
+            Estimate curBestEstimate = isMaximizeStage
+                ? Estimate.MinInf
+                : Estimate.MaxInf;
 
             foreach (Move move in game.GetAllowedMoves())
             {
@@ -48,7 +52,7 @@ namespace GameAI.Core.Engines.BruteForce
                 // force AI to win faster
                 if (game.State.IsTerminate && estimate != Estimate.Zero)
                 {
-                    estimate.Value += depth * (isMaximizeStage ? -1 : +1);
+                    EstimateHelper.AdjustTerminalStateEstimate(depth, ref estimate);
                 }
 
                 if (depth < 3)
@@ -83,8 +87,10 @@ namespace GameAI.Core.Engines.BruteForce
             bestMove = curBestMove;
             bestEstimate = curBestEstimate;
 
+#if DEBUG
             if (depth <=  3)
                 Trace.WriteLine($"{Tab(depth-1)}RET: {depth}; BM: {bestMove}; E: {bestEstimate} ({(isMaximizeStage ? "max" : "min")})");
+#endif
         }
 
         private void UpdateBestMove(bool maximaize,

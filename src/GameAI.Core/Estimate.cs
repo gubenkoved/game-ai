@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,18 +13,23 @@ namespace GameAI.Core
     /// </summary>
     public struct Estimate
     {
-        public const int AbsMaxValue = 1000 * 1000;
-
         public const int AbsInfValue = 1000 * 1000 * 1000;
 
         #region Data
-        public int Value;
+        private int _value;
+        public int Value
+        {
+            get { return _value; }
+            set
+            {
+                Debug.Assert(Math.Abs(value) <= AbsInfValue);
+
+                _value = value;
+            }
+        }
         #endregion
 
         public static readonly Estimate Zero = new Estimate() { Value = 0 };
-
-        public static readonly Estimate Max = new Estimate() { Value = AbsMaxValue };
-        public static readonly Estimate Min = new Estimate() { Value = -AbsMaxValue };
 
         public static readonly Estimate MaxInf = new Estimate() { Value = AbsInfValue };
         public static readonly Estimate MinInf = new Estimate() { Value = -AbsInfValue };

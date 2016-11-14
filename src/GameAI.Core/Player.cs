@@ -11,11 +11,11 @@ namespace GameAI.Core
         /// <summary>
         /// Player that tries to maximize "estimate".
         /// </summary>
-        Maximizing,
+        Maximizing = 0,
 
         /// <summary>
         /// Player that tries to minimize "estimate".
         /// </summary>
-        Minimizing,
+        Minimizing = 1,
     }
 }

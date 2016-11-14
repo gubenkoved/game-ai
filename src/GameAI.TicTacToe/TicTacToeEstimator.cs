@@ -60,8 +60,8 @@ namespace GameAI.TicTacToe
                     isTerminate = true;
 
                     return takenBy == Player.Maximizing
-                        ? Estimate.Max
-                        : Estimate.Min;
+                        ? Estimate.MaxInf
+                        : Estimate.MinInf;
                 }
             }
 

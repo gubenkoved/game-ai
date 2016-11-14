@@ -18,8 +18,8 @@ namespace GameAI.Core.Engines.AlphaBeta
 
             Estimate estimate = FindImpl(
                 game: game,
-                alpha: Estimate.Min,
-                beta: Estimate.Max,
+                alpha: Estimate.MinInf,
+                beta: Estimate.MaxInf,
                 depth: 0,
                 maxDepth: MaxDepth,
                 bestMove: ref move);
@@ -35,6 +35,8 @@ namespace GameAI.Core.Engines.AlphaBeta
 
         private Estimate FindImpl(Game game, Estimate alpha, Estimate beta, int depth, int maxDepth, ref Move bestMove)
         {
+            Player player = game.State.NextMovePlayer;
+
             if (maxDepth - depth == 0)
             {
                 return game.State.StaticEstimate;
@@ -42,10 +44,18 @@ namespace GameAI.Core.Engines.AlphaBeta
 
             if (game.State.IsTerminate)
             {
-                return game.State.StaticEstimate;
+                // make AI pick shortest path to terminate state
+                // otherwise there will be funny situation then AI seeing that it won
+                // w/o chances for other side will not purse the winning
+
+                Estimate terminateEstimate = game.State.StaticEstimate;
+
+                EstimateHelper.AdjustTerminalStateEstimate(depth, ref terminateEstimate);
+
+                return terminateEstimate;
             }
 
-            if (game.State.NextMovePlayer == Player.Maximizing)
+            if (player == Player.Maximizing)
             {
                 // trying to get Alpha higher
                 // alpha will be MINIMAL possible outcome of the current position
@@ -61,7 +71,7 @@ namespace GameAI.Core.Engines.AlphaBeta
 
                         alpha = Estimate.GetMax(alpha, v);
 
-                        if (estimate > v)
+                        if (estimate >= v)
                         {
                             v = estimate;
 
@@ -69,10 +79,17 @@ namespace GameAI.Core.Engines.AlphaBeta
                                 bestMove = move;
                         }
 
+#if DEBUG
+                        if (depth == 0)
+                        {
+                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {estimate} -- Term? {game.State.IsTerminate}");
+                        }
+#endif
+
                         if (alpha >= beta)
                         {
                             // beta cut-off
-                            Trace.WriteLine($"Beta cut-off on depth {depth}");
+                            //Trace.WriteLine($"Beta cut-off on depth {depth}");
                             break;
                         }
                     }
@@ -94,7 +111,7 @@ namespace GameAI.Core.Engines.AlphaBeta
 
                         beta = Estimate.GetMin(alpha, v);
 
-                        if (estimate < v)
+                        if (estimate <= v)
                         {
                             v = estimate;
 
@@ -102,10 +119,17 @@ namespace GameAI.Core.Engines.AlphaBeta
                                 bestMove = move;
                         }
 
+#if DEBUG
+                        if (depth == 0)
+                        {
+                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {estimate} -- Term? {game.State.IsTerminate}");
+                        }
+#endif
+
                         if (alpha >= beta)
                         {
                             // alpha cut-off
-                            Trace.WriteLine($"Alpha cut-off on depth {depth}");
+                            //Trace.WriteLine($"Alpha cut-off on depth {depth}");
                             break;
                         }
                     }

@@ -26,14 +26,18 @@ namespace GameAI.TicTacToe.Test
         }
 
         [TestMethod]
-        public void CheckMoveToWin()
+        public void OneMoveToWinTheGame()
         {
             var game = new TicTacToeGame();
 
             game.State.SetCell(1, 1, Player.Maximizing);
             game.State.SetCell(2, 0, Player.Maximizing);
 
-            TicTacToeMove bestMove = _ai.Analyse(game).BestMove as TicTacToeMove;
+            game.State.NextMovePlayer = Player.Maximizing;
+
+            AIResult aiResult = _ai.Analyse(game);
+
+            TicTacToeMove bestMove = aiResult.BestMove as TicTacToeMove;
 
             Assert.AreEqual(0, bestMove.X);
             Assert.AreEqual(2, bestMove.Y);
@@ -90,7 +94,7 @@ namespace GameAI.TicTacToe.Test
             }
 
             Assert.IsTrue(game.State.IsTerminate);
-            Assert.IsTrue(game.State.StaticEstimate >= Estimate.Max);
+            Assert.IsTrue(Math.Abs(game.State.StaticEstimate.Value - Estimate.MaxInf.Value) < Estimate.MaxInf.Value / 1000);
         }
 
         [TestMethod]
@@ -146,10 +150,11 @@ namespace GameAI.TicTacToe.Test
             // -------
             // |o|x|x|
             // -------
-            // |x|o| |
+            // |x|o|*|
             // -------
             // |o| |x|
             // -------
+            // * -- expected next move
 
             var game = new TicTacToeGame();
 
@@ -165,7 +170,11 @@ namespace GameAI.TicTacToe.Test
 
             game.State.NextMovePlayer = Player.Minimizing;
 
-            var bestMove = _ai.Analyse(game).BestMove as TicTacToeMove;
+            AIResult aiResult = _ai.Analyse(game);
+
+            Assert.AreEqual(Estimate.Zero, aiResult.Estimate, "it should be draw game estimate");
+
+            var bestMove = aiResult.BestMove as TicTacToeMove;
 
             Assert.AreEqual(2, bestMove.X, "x");
             Assert.AreEqual(1, bestMove.Y, "y");
