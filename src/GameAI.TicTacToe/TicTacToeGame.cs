@@ -11,16 +11,23 @@ namespace GameAI.TicTacToe
     public class TicTacToeGame
         : Game2<TicTacToeState, TicTacToeMove>
     {
-        private readonly TicTacToeEstimator _estimator;
+        private TicTacToeEstimator _estimator;
 
-        private readonly int _n;
+        private int _n;
 
         public TicTacToeGame(int size = 3)
         {
-            _n = size;
-            _estimator = new TicTacToeEstimator(size);
+            TicTacToeState initState = GetIntitialState(size);
 
-            State = GetIntitialState();
+            Init2(initState);
+        }
+
+        public override void Init2(TicTacToeState state)
+        {
+            _n = state.Size;
+            _estimator = new TicTacToeEstimator(_n);
+            
+            State = state;
         }
 
         public override IEnumerable<Move> GetAllowedMoves()
@@ -41,9 +48,9 @@ namespace GameAI.TicTacToe
             }
         }
 
-        protected TicTacToeState GetIntitialState()
+        protected TicTacToeState GetIntitialState(int size)
         {
-            return new TicTacToeState(_n)
+            return new TicTacToeState(size)
             {
                 StaticEstimate = Estimate.Zero,
                 NextMovePlayer = Player.Maximizing,

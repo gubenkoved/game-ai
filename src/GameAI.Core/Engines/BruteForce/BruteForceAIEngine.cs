@@ -46,7 +46,7 @@ namespace GameAI.Core.Engines.BruteForce
                 Estimate estimate = game.State.StaticEstimate;
 
                 // force AI to win faster
-                if (game.State.IsTerminate && !estimate.IsZero)
+                if (game.State.IsTerminate && estimate != Estimate.Zero)
                 {
                     estimate.Value += depth * (isMaximizeStage ? -1 : +1);
                 }

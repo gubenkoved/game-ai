@@ -12,31 +12,17 @@ namespace GameAI.Core
     /// </summary>
     public struct Estimate
     {
+        private const int MaxValue = 1000 * 1000;
+
         #region Data
         public int Value;
         #endregion
 
-        public bool IsZero
-        { get
-            {
-                return Value == 0;
-            }
-        }
+        public static readonly Estimate Zero = new Estimate() { Value = 0 };
 
-        public static Estimate Zero
-        {
-            get { return new Estimate() { Value = 0 }; }
-        }
+        public static readonly Estimate Max = new Estimate() { Value = MaxValue };
 
-        public static Estimate Max
-        {
-            get { return new Estimate() { Value = 1000000 }; }
-        }
-
-        public static Estimate Min
-        {
-            get { return new Estimate() { Value = -1000000 }; }
-        }
+        public static readonly Estimate Min = new Estimate() { Value = -MaxValue };
 
         #region Operators overloading
         public static bool operator >(Estimate left, Estimate right)
@@ -66,7 +52,23 @@ namespace GameAI.Core
         public static bool operator <=(Estimate left, Estimate right)
         {
             return left < right || left == right;
-        } 
+        }
+        #endregion
+
+        #region Methods
+        public static Estimate GetMax(Estimate a, Estimate b)
+        {
+            return a > b
+                ? a
+                : b;
+        }
+
+        public static Estimate GetMin(Estimate a, Estimate b)
+        {
+            return a < b
+                ? a
+                : b;
+        }
         #endregion
 
         public override string ToString()

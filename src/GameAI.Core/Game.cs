@@ -9,7 +9,7 @@ namespace GameAI.Core
     public abstract class Game
     {
         #region Properties
-        public virtual State State { get; set; }
+        public virtual State State { get; protected set; }
         #endregion
 
         public Game()
@@ -28,6 +28,8 @@ namespace GameAI.Core
         {
             UndoMoveImpl(move);
         }
+
+        public abstract void Init(State state);
         #endregion
 
         #region Protected methods
@@ -54,7 +56,7 @@ namespace GameAI.Core
                 return base.State as TState;
             }
 
-            set
+            protected set
             {
                 base.State = value;
             }
@@ -73,5 +75,12 @@ namespace GameAI.Core
         protected abstract void DoMoveImpl2(TMove move);
 
         protected abstract void UndoMoveImpl2(TMove move);
+
+        public override void Init(State state)
+        {
+            Init2(state as TState);
+        }
+
+        public abstract void Init2(TState state);
     }
 }
