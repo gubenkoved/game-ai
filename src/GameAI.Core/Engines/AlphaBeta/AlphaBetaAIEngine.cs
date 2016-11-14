@@ -20,7 +20,7 @@ namespace GameAI.Core.Engines.AlphaBeta
                 game: game,
                 alpha: Estimate.MinInf,
                 beta: Estimate.MaxInf,
-                depth: 0,
+                depth: 1,
                 maxDepth: MaxDepth,
                 bestMove: ref move);
 
@@ -69,20 +69,20 @@ namespace GameAI.Core.Engines.AlphaBeta
                     {
                         Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
 
-                        if (curEstimate >= v)
+                        if (curEstimate > v)
                         {
                             v = curEstimate;
 
-                            if (depth == 0)
+                            if (depth == 1)
                                 bestMove = move;
                         }
 
                         alpha = Estimate.GetMax(alpha, v);
 
 #if DEBUG
-                        if (depth == 0)
+                        if (depth <= 3)
                         {
-                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {curEstimate} -- Term? {game.State.IsTerminate}");
+                            Trace.WriteLine($"{ new string(' ', depth) } - Move {move} for {player} -- {curEstimate} -- Term? {game.State.IsTerminate}");
                         }
 #endif
 
@@ -109,20 +109,20 @@ namespace GameAI.Core.Engines.AlphaBeta
                     {
                         Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
 
-                        if (curEstimate <= v)
+                        if (curEstimate < v)
                         {
                             v = curEstimate;
 
-                            if (depth == 0)
+                            if (depth == 1)
                                 bestMove = move;
                         }
 
                         beta = Estimate.GetMin(beta, v);
 
 #if DEBUG
-                        if (depth == 0)
+                        if (depth <= 3)
                         {
-                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {curEstimate} -- Term? {game.State.IsTerminate}");
+                            Trace.WriteLine($"{ new string(' ', depth) } - Move {move} for {player} -- {curEstimate} -- Term? {game.State.IsTerminate}");
                         }
 #endif
 

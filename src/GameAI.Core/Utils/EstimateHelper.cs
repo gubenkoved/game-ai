@@ -11,7 +11,7 @@ namespace GameAI.Core.Utils
     {
         public static void AdjustTerminalStateEstimate(int searchDepth, ref Estimate terminateEstimate)
         {
-            Debug.Assert(searchDepth >= 0);
+            Debug.Assert(searchDepth >= 1);
             Debug.Assert(terminateEstimate == Estimate.MaxInf
                 || terminateEstimate == Estimate.MinInf
                 || terminateEstimate == Estimate.Zero);

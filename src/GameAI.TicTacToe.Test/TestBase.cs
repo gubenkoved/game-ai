@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameAI.Core.Engines.BruteForce;
 using GameAI.Core;
+using System.Diagnostics;
 
 namespace GameAI.TicTacToe.Test
 {
@@ -17,12 +18,36 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void CheckFirstMove()
         {
-            var game = new TicTacToeGame();
+            var game = new TicTacToeGame(3);
 
             AIResult aiResult = _ai.Analyse(game);
+            TicTacToeMove bestMove = aiResult.BestMove as TicTacToeMove;
 
             Assert.IsNotNull(aiResult);
-            Assert.IsNotNull(aiResult.BestMove as TicTacToeMove);
+            Assert.IsNotNull(bestMove);
+
+            // check it's one of good first moves -- 4 corners or center
+            var goodMoves = new[]
+            {
+                Tuple.Create(0, 0),
+                Tuple.Create(2, 0),
+                Tuple.Create(0, 2),
+                Tuple.Create(2, 2),
+                Tuple.Create(0, 0),
+            };
+
+            bool goodMove = false;
+
+            foreach (var p in goodMoves)
+            {
+                if (bestMove.X == p.Item1 && bestMove.Y == p.Item2)
+                {
+                    goodMove = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(goodMove, $"first move is bad: {bestMove}");
         }
 
         [TestMethod]
@@ -102,15 +127,25 @@ namespace GameAI.TicTacToe.Test
         {
             var game = new TicTacToeGame();
 
+            int step = 1;
+
             // play as AI wants till the end
-            while (!game.State.IsTerminate)
+            while (!game.State.IsTerminate )
             {
-                AIResult estimatedMove = _ai.Analyse(game);
-                game.DoMove(estimatedMove.BestMove);
+                Trace.WriteLine($"Step #{step}...");
+
+                AIResult aiResult = _ai.Analyse(game);
+
+                game.DoMove(aiResult.BestMove);
+
+                // draw game estimation all the way till the end
+                Assert.IsTrue(aiResult.Estimate == Estimate.Zero, $"step {step} -- draw game expected");
+
+                step += 1;
             }
 
-            Assert.IsTrue(game.State.IsTerminate);
-            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero, "draw game expected");
+            Assert.IsTrue(game.State.IsTerminate, "it should be terminate state nows");
+            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero, $"draw game expected");
         }
 
         [TestMethod]
