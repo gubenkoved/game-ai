@@ -19,7 +19,10 @@ namespace GameAI.TicTacToe.Test
         {
             var game = new TicTacToeGame();
 
-            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
+            AIResult aiResult = _ai.Analyse(game);
+
+            Assert.IsNotNull(aiResult);
+            Assert.IsNotNull(aiResult.BestMove as TicTacToeMove);
         }
 
         [TestMethod]
@@ -30,7 +33,7 @@ namespace GameAI.TicTacToe.Test
             game.State.SetCell(1, 1, Player.Maximizing);
             game.State.SetCell(2, 0, Player.Maximizing);
 
-            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
+            TicTacToeMove bestMove = _ai.Analyse(game).BestMove as TicTacToeMove;
 
             Assert.AreEqual(0, bestMove.X);
             Assert.AreEqual(2, bestMove.Y);
@@ -54,11 +57,11 @@ namespace GameAI.TicTacToe.Test
                 Y = 1,
             });
 
-            var estimatedMove = _ai.GetBestMove(game);
+            var estimatedMove = _ai.Analyse(game);
 
             Assert.IsTrue(estimatedMove.Estimate.Value > 1000);
 
-            game.DoMove(estimatedMove.Move);
+            game.DoMove(estimatedMove.BestMove);
         }
 
         [TestMethod]
@@ -82,8 +85,8 @@ namespace GameAI.TicTacToe.Test
             // play as AI wants till the end
             while (!game.State.IsTerminate)
             {
-                EstimatedMove estimatedMove = _ai.GetBestMove(game);
-                game.DoMove(estimatedMove.Move);
+                AIResult estimatedMove = _ai.Analyse(game);
+                game.DoMove(estimatedMove.BestMove);
             }
 
             Assert.IsTrue(game.State.IsTerminate);
@@ -98,8 +101,8 @@ namespace GameAI.TicTacToe.Test
             // play as AI wants till the end
             while (!game.State.IsTerminate)
             {
-                EstimatedMove estimatedMove = _ai.GetBestMove(game);
-                game.DoMove(estimatedMove.Move);
+                AIResult estimatedMove = _ai.Analyse(game);
+                game.DoMove(estimatedMove.BestMove);
             }
 
             Assert.IsTrue(game.State.IsTerminate);
@@ -131,7 +134,7 @@ namespace GameAI.TicTacToe.Test
 
             game.State.NextMovePlayer = Player.Minimizing;
 
-            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.Analyse(game).BestMove as TicTacToeMove;
 
             Assert.AreEqual(2, bestMove.X);
             Assert.AreEqual(0, bestMove.Y);
@@ -162,7 +165,7 @@ namespace GameAI.TicTacToe.Test
 
             game.State.NextMovePlayer = Player.Minimizing;
 
-            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.Analyse(game).BestMove as TicTacToeMove;
 
             Assert.AreEqual(2, bestMove.X, "x");
             Assert.AreEqual(1, bestMove.Y, "y");

@@ -8,6 +8,6 @@ namespace GameAI.Core
 {
     public abstract class AIEngine
     {
-        public abstract EstimatedMove GetBestMove(Game game);
+        public abstract AIResult Analyse(Game game);
     }
 }

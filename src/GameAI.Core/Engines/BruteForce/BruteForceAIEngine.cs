@@ -13,7 +13,7 @@ namespace GameAI.Core.Engines.BruteForce
 
         public int MovesChecked = 0;
 
-        public override EstimatedMove GetBestMove(Game game)
+        public override AIResult Analyse(Game game)
         {
             MovesChecked = 0;
 
@@ -23,10 +23,10 @@ namespace GameAI.Core.Engines.BruteForce
 
             Trace.WriteLine($"Moves checked: {MovesChecked}");
 
-            return new EstimatedMove()
+            return new AIResult()
             {
                 Estimate = bestEstimate,
-                Move = bestMove,
+                BestMove = bestMove,
             };
         }
 

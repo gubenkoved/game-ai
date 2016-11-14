@@ -64,15 +64,22 @@ namespace GameAI.TicTacToe
             State.SetCell(move.X, move.Y, State.NextMovePlayer);
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
 
-            bool isTerminateState;
-            State.StaticEstimate = _estimator.GetEstimate(State, out isTerminateState);
-            State.IsTerminate = isTerminateState;
+            ReEstimate();
         }
 
         protected override void UndoMoveImpl2(TicTacToeMove move)
         {
             State.SetCell(move.X, move.Y, null);
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
+
+            ReEstimate();
+        }
+
+        private void ReEstimate()
+        {
+            bool isTerminateState;
+            State.StaticEstimate = _estimator.GetEstimate(State, out isTerminateState);
+            State.IsTerminate = isTerminateState;
         }
     }
 }

@@ -12,7 +12,9 @@ namespace GameAI.Core
     /// </summary>
     public struct Estimate
     {
-        private const int MaxValue = 1000 * 1000;
+        public const int AbsMaxValue = 1000 * 1000;
+
+        public const int AbsInfValue = 1000 * 1000 * 1000;
 
         #region Data
         public int Value;
@@ -20,9 +22,11 @@ namespace GameAI.Core
 
         public static readonly Estimate Zero = new Estimate() { Value = 0 };
 
-        public static readonly Estimate Max = new Estimate() { Value = MaxValue };
+        public static readonly Estimate Max = new Estimate() { Value = AbsMaxValue };
+        public static readonly Estimate Min = new Estimate() { Value = -AbsMaxValue };
 
-        public static readonly Estimate Min = new Estimate() { Value = -MaxValue };
+        public static readonly Estimate MaxInf = new Estimate() { Value = AbsInfValue };
+        public static readonly Estimate MinInf = new Estimate() { Value = -AbsInfValue };
 
         #region Operators overloading
         public static bool operator >(Estimate left, Estimate right)
@@ -56,6 +60,14 @@ namespace GameAI.Core
         #endregion
 
         #region Methods
+        public static Estimate FromValue(int value)
+        {
+            return new Estimate()
+            {
+                Value = value,
+            };
+        }
+
         public static Estimate GetMax(Estimate a, Estimate b)
         {
             return a > b

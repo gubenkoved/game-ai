@@ -58,11 +58,11 @@ namespace GameAI.TicTacToe.UI
                     // ui move
                     var ai = new BruteForceAIEngine();
 
-                    EstimatedMove aiMove = ai.GetBestMove(game);
+                    AIResult aiMove = ai.Analyse(game);
 
-                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.Move}; MOVES CHKD: {ai.MovesChecked}");
+                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.BestMove}; MOVES CHKD: {ai.MovesChecked}");
 
-                    game.DoMove(aiMove.Move);
+                    game.DoMove(aiMove.BestMove);
                 }
             }
 
