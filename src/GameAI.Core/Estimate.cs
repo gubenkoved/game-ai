@@ -9,9 +9,9 @@ namespace GameAI.Core
 {
     /// <summary>
     /// Reflects the estimation for the game state.
-    /// Positive estimation means favor for Player.A, otherwise Player.B is in better position.
+    /// Positive estimation means favor for Player.Maximizing, otherwise Player.Minimizing is in better position.
     /// </summary>
-    public struct Estimate
+    public struct Estimate : IEquatable<Estimate>, IComparable<Estimate>
     {
         public const int AbsInfValue = 1000 * 1000 * 1000;
 
@@ -34,19 +34,40 @@ namespace GameAI.Core
         public static readonly Estimate MaxInf = new Estimate() { Value = AbsInfValue };
         public static readonly Estimate MinInf = new Estimate() { Value = -AbsInfValue };
 
+        #region Interfaces implementation
+        public bool Equals(Estimate other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        public int CompareTo(Estimate other)
+        {
+            if (this.Value == other.Value)
+            {
+                return 0;
+            } else if (this.Value > other.Value)
+            {
+                return +1;
+            } else
+            {
+                return -1;
+            }
+        } 
+        #endregion
+
         #region Operators overloading
         public static bool operator >(Estimate left, Estimate right)
         {
-            return left.Value > right.Value;
+            return left.CompareTo(right) > 0;
         }
 
         public static bool operator <(Estimate left, Estimate right)
         {
-            return left.Value < right.Value;
+            return left.CompareTo(right) < 0;
         }
         public static bool operator ==(Estimate left, Estimate right)
         {
-            return left.Value == right.Value;
+            return left.Equals(right);
         }
 
         public static bool operator !=(Estimate left, Estimate right)
@@ -54,14 +75,34 @@ namespace GameAI.Core
             return !(left == right);
         }
 
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (object.ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (!(obj is Estimate))
+            {
+                return false;
+            }
+
+            return this.Equals((Estimate)obj);
+        }
+
         public static bool operator >=(Estimate left, Estimate right)
         {
-            return left > right || left == right;
+            return left.CompareTo(right) >= 0;
         }
 
         public static bool operator <=(Estimate left, Estimate right)
         {
-            return left < right || left == right;
+            return left.CompareTo(right) <= 0;
         }
         #endregion
 
@@ -93,5 +134,7 @@ namespace GameAI.Core
         {
             return $"<{Value}>";
         }
+
+        
     }
 }
