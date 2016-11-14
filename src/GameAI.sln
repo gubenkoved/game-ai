@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.Core", "GameAI.Core\GameAI.Core.csproj", "{B4B9F676-7C6D-4540-B325-09B5021130EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.Tests", "GameAI.Tests\GameAI.Tests.csproj", "{D5E875F0-DFB7-4AB0-9254-55076FD275DF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.TicTacToe", "GameAI.TicTacToe\GameAI.TicTacToe.csproj", "{A24B3280-E676-482B-8171-76B9A884996D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.TicTacToe.UI", "GameAI.TicTacToe.UI\GameAI.TicTacToe.UI.csproj", "{BFBA8F65-9FC1-497A-A9F5-AA7AA4C31F5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAI.TicTacToe.Test", "GameAI.TicTacToe.Test\GameAI.TicTacToe.Test.csproj", "{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4B9F676-7C6D-4540-B325-09B5021130EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5E875F0-DFB7-4AB0-9254-55076FD275DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A24B3280-E676-482B-8171-76B9A884996D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A24B3280-E676-482B-8171-76B9A884996D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A24B3280-E676-482B-8171-76B9A884996D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{BFBA8F65-9FC1-497A-A9F5-AA7AA4C31F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFBA8F65-9FC1-497A-A9F5-AA7AA4C31F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFBA8F65-9FC1-497A-A9F5-AA7AA4C31F5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

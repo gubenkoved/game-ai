@@ -1,23 +1,25 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GameAI.TicTacToe;
 using GameAI.Core.Engines.BruteForce;
 using GameAI.Core;
-using System.Diagnostics;
 
-namespace GameAI.Tests
+namespace GameAI.TicTacToe.Test
 {
-    [TestClass]
-    public class TicTacToeTest
+    public abstract class TestBase
     {
+        protected AIEngine _ai;
+
+        public TestBase(AIEngine ai)
+        {
+            _ai = ai;
+        }
+
         [TestMethod]
         public void CheckFirstMove()
         {
             var game = new TicTacToeGame();
 
-            var ai = new BruteForceAIEngine();
-
-            var bestMove = ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
         }
 
         [TestMethod]
@@ -28,9 +30,7 @@ namespace GameAI.Tests
             game.State.SetCell(1, 1, Player.A);
             game.State.SetCell(2, 0, Player.A);
 
-            var ai = new BruteForceAIEngine();
-
-            var bestMove = ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 
             Assert.AreEqual(0, bestMove.X);
             Assert.AreEqual(2, bestMove.Y);
@@ -54,9 +54,7 @@ namespace GameAI.Tests
                 Y = 1,
             });
 
-            var ai = new BruteForceAIEngine();
-
-            var bestMove = ai.GetBestMove(game);
+            var bestMove = _ai.GetBestMove(game);
 
             Assert.IsTrue(bestMove.Estimate.IsTerminate);
             Assert.IsTrue(bestMove.Estimate.Value > 1000);
@@ -87,9 +85,7 @@ namespace GameAI.Tests
 
             game.State.NextMovePlayer = Player.B;
 
-            var ai = new BruteForceAIEngine();
-
-            var bestMove = ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 
             Assert.AreEqual(2, bestMove.X);
             Assert.AreEqual(0, bestMove.Y);
@@ -120,14 +116,10 @@ namespace GameAI.Tests
 
             game.State.NextMovePlayer = Player.B;
 
-            var ai = new BruteForceAIEngine();
-
-            var bestMove = ai.GetBestMove(game).Move as TicTacToeMove;
+            var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 
             Assert.AreEqual(2, bestMove.X, "x");
             Assert.AreEqual(1, bestMove.Y, "y");
         }
-
-
     }
 }

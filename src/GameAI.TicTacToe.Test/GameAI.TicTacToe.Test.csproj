@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D5E875F0-DFB7-4AB0-9254-55076FD275DF}</ProjectGuid>
+    <ProjectGuid>{36DDBFB8-A93C-4F01-9630-11C7E88EEED9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameAI.Tests</RootNamespace>
-    <AssemblyName>GameAI.Tests</AssemblyName>
+    <RootNamespace>GameAI.TicTacToe.Test</RootNamespace>
+    <AssemblyName>GameAI.TicTacToe.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,7 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TicTacToeTest.cs" />
+    <Compile Include="AlphaBetaTest.cs" />
+    <Compile Include="BruteForceTest.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

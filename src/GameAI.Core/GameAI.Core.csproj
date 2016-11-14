@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIEngine.cs" />
+    <Compile Include="Engines\AlphaBeta\AlphaBetaAIEngine.cs" />
     <Compile Include="Engines\BruteForce\BruteForceAIEngine.cs" />
     <Compile Include="Estimate.cs" />
     <Compile Include="EstimatedMove.cs" />
