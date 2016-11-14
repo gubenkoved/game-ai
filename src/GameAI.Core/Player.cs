@@ -8,7 +8,14 @@ namespace GameAI.Core
 {
     public enum Player
     {
-        A,
-        B,
+        /// <summary>
+        /// Player that tries to maximize "estimate".
+        /// </summary>
+        Maximizing,
+
+        /// <summary>
+        /// Player that tries to minimize "estimate".
+        /// </summary>
+        Minimizing,
     }
 }

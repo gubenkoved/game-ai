@@ -32,7 +32,7 @@ namespace GameAI.Core.Engines.BruteForce
 
         private void GetBestMoveImpl(Game game, int depth, out Move bestMove, out Estimate bestEstimate)
         {
-            bool isMaximizeStage = game.State.NextMovePlayer == Player.A;
+            bool isMaximizeStage = game.State.NextMovePlayer == Player.Maximizing;
 
             Move curBestMove = null;
             Estimate curBestEstimate = isMaximizeStage ? Estimate.Min : Estimate.Max;
@@ -43,10 +43,10 @@ namespace GameAI.Core.Engines.BruteForce
 
                 game.DoMove(move);
 
-                Estimate estimate = game.State.Estimate;
+                Estimate estimate = game.State.StaticEstimate;
 
-                // fore AI to win faster
-                if (estimate.IsTerminate && !estimate.IsZero)
+                // force AI to win faster
+                if (game.State.IsTerminate && !estimate.IsZero)
                 {
                     estimate.Value += depth * (isMaximizeStage ? -1 : +1);
                 }
@@ -56,7 +56,7 @@ namespace GameAI.Core.Engines.BruteForce
                     Trace.WriteLine($"{Tab(depth - 1)}Consider {move}");
                 }
 
-                if (estimate.IsTerminate || depth == MaxDepth)
+                if (game.State.IsTerminate || depth == MaxDepth)
                 {
                     // no longer go deeper
 

@@ -27,8 +27,8 @@ namespace GameAI.TicTacToe.Test
         {
             var game = new TicTacToeGame();
 
-            game.State.SetCell(1, 1, Player.A);
-            game.State.SetCell(2, 0, Player.A);
+            game.State.SetCell(1, 1, Player.Maximizing);
+            game.State.SetCell(2, 0, Player.Maximizing);
 
             var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 
@@ -47,17 +47,63 @@ namespace GameAI.TicTacToe.Test
                 Y = 1,
             });
 
-            // bad for B move
+            // bad for Minimizing player move
             game.DoMove(new TicTacToeMove()
             {
                 X = 0,
                 Y = 1,
             });
 
-            var bestMove = _ai.GetBestMove(game);
+            var estimatedMove = _ai.GetBestMove(game);
 
-            Assert.IsTrue(bestMove.Estimate.IsTerminate);
-            Assert.IsTrue(bestMove.Estimate.Value > 1000);
+            Assert.IsTrue(estimatedMove.Estimate.Value > 1000);
+
+            game.DoMove(estimatedMove.Move);
+        }
+
+        [TestMethod]
+        public void EnsureAIWinsAfterOpponentBadMove()
+        {
+            var game = new TicTacToeGame();
+
+            game.DoMove(new TicTacToeMove()
+            {
+                X = 1,
+                Y = 1,
+            });
+
+            // bad for Minimizing player move
+            game.DoMove(new TicTacToeMove()
+            {
+                X = 0,
+                Y = 1,
+            });
+
+            // play as AI wants till the end
+            while (!game.State.IsTerminate)
+            {
+                EstimatedMove estimatedMove = _ai.GetBestMove(game);
+                game.DoMove(estimatedMove.Move);
+            }
+
+            Assert.IsTrue(game.State.IsTerminate);
+            Assert.IsTrue(game.State.StaticEstimate >= Estimate.Max);
+        }
+
+        [TestMethod]
+        public void EnsureDrawGameWhenAIvsAI()
+        {
+            var game = new TicTacToeGame();
+
+            // play as AI wants till the end
+            while (!game.State.IsTerminate)
+            {
+                EstimatedMove estimatedMove = _ai.GetBestMove(game);
+                game.DoMove(estimatedMove.Move);
+            }
+
+            Assert.IsTrue(game.State.IsTerminate);
+            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero);
         }
 
         [TestMethod]
@@ -73,17 +119,17 @@ namespace GameAI.TicTacToe.Test
 
             var game = new TicTacToeGame();
 
-            game.State.SetCell(0, 0, Player.B);
-            game.State.SetCell(1, 0, Player.A);
+            game.State.SetCell(0, 0, Player.Minimizing);
+            game.State.SetCell(1, 0, Player.Maximizing);
             game.State.SetCell(2, 0, null);
-            game.State.SetCell(0, 1, Player.B);
-            game.State.SetCell(1, 1, Player.A);
-            game.State.SetCell(2, 1, Player.A);
-            game.State.SetCell(0, 2, Player.A);
-            game.State.SetCell(1, 2, Player.B);
+            game.State.SetCell(0, 1, Player.Minimizing);
+            game.State.SetCell(1, 1, Player.Maximizing);
+            game.State.SetCell(2, 1, Player.Maximizing);
+            game.State.SetCell(0, 2, Player.Maximizing);
+            game.State.SetCell(1, 2, Player.Minimizing);
             game.State.SetCell(2, 2, null);
 
-            game.State.NextMovePlayer = Player.B;
+            game.State.NextMovePlayer = Player.Minimizing;
 
             var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 
@@ -104,17 +150,17 @@ namespace GameAI.TicTacToe.Test
 
             var game = new TicTacToeGame();
 
-            game.State.SetCell(0, 0, Player.B);
-            game.State.SetCell(1, 0, Player.A);
-            game.State.SetCell(2, 0, Player.A);
-            game.State.SetCell(0, 1, Player.A);
-            game.State.SetCell(1, 1, Player.B);
+            game.State.SetCell(0, 0, Player.Minimizing);
+            game.State.SetCell(1, 0, Player.Maximizing);
+            game.State.SetCell(2, 0, Player.Maximizing);
+            game.State.SetCell(0, 1, Player.Maximizing);
+            game.State.SetCell(1, 1, Player.Minimizing);
             game.State.SetCell(2, 1, null);
-            game.State.SetCell(0, 2, Player.B);
+            game.State.SetCell(0, 2, Player.Minimizing);
             game.State.SetCell(1, 2, null);
-            game.State.SetCell(2, 2, Player.A);
+            game.State.SetCell(2, 2, Player.Maximizing);
 
-            game.State.NextMovePlayer = Player.B;
+            game.State.NextMovePlayer = Player.Minimizing;
 
             var bestMove = _ai.GetBestMove(game).Move as TicTacToeMove;
 

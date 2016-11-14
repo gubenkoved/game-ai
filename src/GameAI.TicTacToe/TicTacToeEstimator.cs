@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameAI.TicTacToe
 {
-    public class TicTacToeEstimator : StateEstimator2<TicTacToeState>
+    public class TicTacToeEstimator
     {
         private struct P
         {
@@ -49,7 +49,7 @@ namespace GameAI.TicTacToe
             }
         }
 
-        public override Estimate GetEstimate2(TicTacToeState state)
+        public Estimate GetEstimate(TicTacToeState state, out bool isTerminate)
         {
             foreach (var line in _lines)
             {
@@ -57,18 +57,22 @@ namespace GameAI.TicTacToe
 
                 if (takenBy != null)
                 {
-                    return takenBy == Player.A
-                        ? Estimate.MaxTerminate
-                        : Estimate.MinTerminate;
+                    isTerminate = true;
+
+                    return takenBy == Player.Maximizing
+                        ? Estimate.Max
+                        : Estimate.Min;
                 }
             }
 
             if (IsBoardFull(state))
             {
-                return Estimate.ZeroTerminate;
+                isTerminate = true;
+                return Estimate.Zero;
             }
 
             // no lines taken -- we do not care to provide static estimate
+            isTerminate = false;
             return Estimate.Zero;
         }
 

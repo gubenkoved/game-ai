@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace GameAI.Core
 {
+    /// <summary>
+    /// Reflects the estimation for the game state.
+    /// Positive estimation means favor for Player.A, otherwise Player.B is in better position.
+    /// </summary>
     public struct Estimate
     {
+        #region Data
         public int Value;
-        public bool IsTerminate;
+        #endregion
 
         public bool IsZero
         { get
@@ -33,21 +38,7 @@ namespace GameAI.Core
             get { return new Estimate() { Value = -1000000 }; }
         }
 
-        public static Estimate ZeroTerminate
-        {
-            get { return new Estimate() { Value = 0, IsTerminate = true, }; }
-        }
-
-        public static Estimate MaxTerminate
-        {
-            get { return new Estimate() { Value = 1000000, IsTerminate = true, }; }
-        }
-
-        public static Estimate MinTerminate
-        {
-            get { return new Estimate() { Value = -1000000, IsTerminate = true, }; }
-        }
-
+        #region Operators overloading
         public static bool operator >(Estimate left, Estimate right)
         {
             return left.Value > right.Value;
@@ -57,11 +48,30 @@ namespace GameAI.Core
         {
             return left.Value < right.Value;
         }
+        public static bool operator ==(Estimate left, Estimate right)
+        {
+            return left.Value == right.Value;
+        }
+
+        public static bool operator !=(Estimate left, Estimate right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator >=(Estimate left, Estimate right)
+        {
+            return left > right || left == right;
+        }
+
+        public static bool operator <=(Estimate left, Estimate right)
+        {
+            return left < right || left == right;
+        } 
+        #endregion
 
         public override string ToString()
         {
-            string suffix = IsTerminate ? "T" : "";
-            return $"[{Value}{suffix}]";
+            return $"<{Value}>";
         }
     }
 }

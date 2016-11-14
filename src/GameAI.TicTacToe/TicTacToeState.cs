@@ -24,7 +24,7 @@ namespace GameAI.TicTacToe
 
             if (player != null)
             {
-                val = (player == Player.A ? true : false);
+                val = (player == Player.Maximizing ? true : false);
             }
 
             Board[y * Size + x] = val;
@@ -41,11 +41,11 @@ namespace GameAI.TicTacToe
 
             if (val == true)
             {
-                return Player.A;
+                return Player.Maximizing;
             }
             else
             {
-                return Player.B;
+                return Player.Minimizing;
             }
         }
     }

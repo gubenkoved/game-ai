@@ -27,10 +27,10 @@ namespace GameAI.TicTacToe.UI
 
                     Player? cellState = state.GetCell(x, y);
 
-                    if (cellState == Player.A)
+                    if (cellState == Player.Maximizing)
                     {
                         Console.Write("x");
-                    } else if (cellState == Player.B)
+                    } else if (cellState == Player.Minimizing)
                     {
                         Console.Write("o");
                     } else

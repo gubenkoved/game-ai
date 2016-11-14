@@ -45,19 +45,21 @@ namespace GameAI.TicTacToe
         {
             return new TicTacToeState(_n)
             {
-                Estimate       = Estimate.Zero,
-                NextMovePlayer = Player.A,
+                StaticEstimate = Estimate.Zero,
+                NextMovePlayer = Player.Maximizing,
             };
         }
 
         protected override void DoMoveImpl2(TicTacToeMove move)
         {
-            bool val = State.NextMovePlayer == Player.A ? true : false;
+            bool val = State.NextMovePlayer == Player.Maximizing ? true : false;
 
             State.SetCell(move.X, move.Y, State.NextMovePlayer);
             State.NextMovePlayer = GetOtherPlayer(State.NextMovePlayer);
 
-            State.Estimate = _estimator.GetEstimate2(State);
+            bool isTerminateState;
+            State.StaticEstimate = _estimator.GetEstimate(State, out isTerminateState);
+            State.IsTerminate = isTerminateState;
         }
 
         protected override void UndoMoveImpl2(TicTacToeMove move)

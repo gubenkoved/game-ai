@@ -36,9 +36,9 @@ namespace GameAI.Core
 
         protected Player GetOtherPlayer(Player player)
         {
-            return player == Player.A
-                ? Player.B
-                : Player.A;
+            return player == Player.Maximizing
+                ? Player.Minimizing
+                : Player.Maximizing;
         }
         #endregion
     }

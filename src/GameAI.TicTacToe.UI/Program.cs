@@ -15,11 +15,11 @@ namespace GameAI.TicTacToe.UI
         {
             var game = new TicTacToeGame();
 
-            while (!game.State.Estimate.IsTerminate)
+            while (!game.State.IsTerminate)
             {
                 TicTacToeUI.DrawState(game.State);
 
-                if (game.State.NextMovePlayer == Core.Player.A)
+                if (game.State.NextMovePlayer == Core.Player.Maximizing)
                 {
                     // let user move
                     Console.Write("MOVE > ");
