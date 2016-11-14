@@ -110,7 +110,7 @@ namespace GameAI.TicTacToe.Test
             }
 
             Assert.IsTrue(game.State.IsTerminate);
-            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero);
+            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero, "draw game expected");
         }
 
         [TestMethod]

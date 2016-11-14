@@ -67,22 +67,22 @@ namespace GameAI.Core.Engines.AlphaBeta
                 {
                     using (DisposableMoveHandle.New(game, move))
                     {
-                        Estimate estimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
+                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
 
-                        alpha = Estimate.GetMax(alpha, v);
-
-                        if (estimate >= v)
+                        if (curEstimate >= v)
                         {
-                            v = estimate;
+                            v = curEstimate;
 
                             if (depth == 0)
                                 bestMove = move;
                         }
 
+                        alpha = Estimate.GetMax(alpha, v);
+
 #if DEBUG
                         if (depth == 0)
                         {
-                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {estimate} -- Term? {game.State.IsTerminate}");
+                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {curEstimate} -- Term? {game.State.IsTerminate}");
                         }
 #endif
 
@@ -107,22 +107,22 @@ namespace GameAI.Core.Engines.AlphaBeta
                 {
                     using (DisposableMoveHandle.New(game, move))
                     {
-                        Estimate estimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
+                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
 
-                        beta = Estimate.GetMin(alpha, v);
-
-                        if (estimate <= v)
+                        if (curEstimate <= v)
                         {
-                            v = estimate;
+                            v = curEstimate;
 
                             if (depth == 0)
                                 bestMove = move;
                         }
 
+                        beta = Estimate.GetMin(beta, v);
+
 #if DEBUG
                         if (depth == 0)
                         {
-                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {estimate} -- Term? {game.State.IsTerminate}");
+                            Trace.WriteLine($"{ new string(' ', depth) } Move {move} -- {curEstimate} -- Term? {game.State.IsTerminate}");
                         }
 #endif
 
