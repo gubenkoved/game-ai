@@ -13,7 +13,7 @@ namespace GameAI.Core
     /// </summary>
     public struct Estimate : IEquatable<Estimate>, IComparable<Estimate>
     {
-        public const int AbsInfValue = 1000 * 1000 * 1000;
+        public const int AbsInfValue = 1000 * 1000;
 
         #region Data
         private int _value;

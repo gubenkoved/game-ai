@@ -10,6 +10,7 @@ namespace GameAI.TicTacToe.Test
     {
         protected AIEngine _ai;
 
+
         public TestBase(AIEngine ai)
         {
             _ai = ai;
@@ -94,7 +95,7 @@ namespace GameAI.TicTacToe.Test
         }
 
         [TestMethod]
-        public void EnsureAIWinsAfterOpponentBadMove()
+        public void EnsureMaximizingPlayerWinsAfterOpponentBadMove()
         {
             var game = new TicTacToeGame();
 
@@ -111,15 +112,54 @@ namespace GameAI.TicTacToe.Test
                 Y = 1,
             });
 
+            int step = 1;
+
             // play as AI wants till the end
             while (!game.State.IsTerminate)
             {
-                AIResult estimatedMove = _ai.Analyse(game);
-                game.DoMove(estimatedMove.BestMove);
+                AIResult aiResult = _ai.Analyse(game);
+
+                game.DoMove(aiResult.BestMove);
+
+                // Maximizing wins estimation all the way till the end
+                Assert.IsTrue(aiResult.Estimate.IsCloseTo(Estimate.MaxInf), $"step {step} -- win MAX estimation expected");
+
+                step += 1;
             }
 
             Assert.IsTrue(game.State.IsTerminate);
-            Assert.IsTrue(Math.Abs(game.State.StaticEstimate.Value - Estimate.MaxInf.Value) < Estimate.MaxInf.Value / 1000);
+            Assert.IsTrue(game.State.StaticEstimate.IsCloseTo(Estimate.MaxInf));
+        }
+
+        [TestMethod]
+        public void EnsureMinimizingPlayerWinsAfterOpponentBadMove()
+        {
+            var game = new TicTacToeGame();
+
+            // bad move
+            game.DoMove(new TicTacToeMove()
+            {
+                X = 1,
+                Y = 0,
+            });
+
+            int step = 1;
+
+            // play as AI wants till the end
+            while (!game.State.IsTerminate)
+            {
+                AIResult aiResult = _ai.Analyse(game);
+
+                game.DoMove(aiResult.BestMove);
+
+                // Maximizing wins estimation all the way till the end
+                Assert.IsTrue(aiResult.Estimate.IsCloseTo(Estimate.MinInf), $"step {step} -- win for MIN estimation expected");
+
+                step += 1;
+            }
+
+            Assert.IsTrue(game.State.IsTerminate);
+            Assert.IsTrue(game.State.StaticEstimate.IsCloseTo(Estimate.MinInf));
         }
 
         [TestMethod]
@@ -139,13 +179,13 @@ namespace GameAI.TicTacToe.Test
                 game.DoMove(aiResult.BestMove);
 
                 // draw game estimation all the way till the end
-                Assert.IsTrue(aiResult.Estimate == Estimate.Zero, $"step {step} -- draw game expected");
+                Assert.IsTrue(aiResult.Estimate.IsCloseTo(Estimate.Zero), $"step {step} -- draw game expected");
 
                 step += 1;
             }
 
-            Assert.IsTrue(game.State.IsTerminate, "it should be terminate state nows");
-            Assert.IsTrue(game.State.StaticEstimate == Estimate.Zero, $"draw game expected");
+            Assert.IsTrue(game.State.IsTerminate, "it should be terminate state now");
+            Assert.IsTrue(game.State.StaticEstimate.IsCloseTo(Estimate.Zero), $"draw game expected");
         }
 
         [TestMethod]
