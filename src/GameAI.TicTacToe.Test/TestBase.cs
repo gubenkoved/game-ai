@@ -136,12 +136,11 @@ namespace GameAI.TicTacToe.Test
         {
             var game = new TicTacToeGame();
 
+            game.DoMove(new TicTacToeMove(0, 1));
+            game.DoMove(new TicTacToeMove(1, 1));
+
             // bad move
-            game.DoMove(new TicTacToeMove()
-            {
-                X = 1,
-                Y = 0,
-            });
+            game.DoMove(new TicTacToeMove(2, 1));
 
             int step = 1;
 
@@ -152,7 +151,7 @@ namespace GameAI.TicTacToe.Test
 
                 game.DoMove(aiResult.BestMove);
 
-                // Maximizing wins estimation all the way till the end
+                // Minimizing wins estimation all the way till the end
                 Assert.IsTrue(aiResult.Estimate.IsCloseTo(Estimate.MinInf), $"step {step} -- win for MIN estimation expected");
 
                 step += 1;
