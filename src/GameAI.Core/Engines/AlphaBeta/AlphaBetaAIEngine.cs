@@ -77,7 +77,7 @@ namespace GameAI.Core.Engines.AlphaBeta
                                 bestMove = move;
                         }
 
-                        alpha = Estimate.GetMax(alpha, v);
+                        alpha = Estimate.Max(alpha, v);
 
 #if DEBUG
                         if (depth <= 3)
@@ -117,7 +117,7 @@ namespace GameAI.Core.Engines.AlphaBeta
                                 bestMove = move;
                         }
 
-                        beta = Estimate.GetMin(beta, v);
+                        beta = Estimate.Min(beta, v);
 
 #if DEBUG
                         if (depth <= 3)

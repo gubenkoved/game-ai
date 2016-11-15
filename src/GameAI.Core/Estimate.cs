@@ -115,14 +115,14 @@ namespace GameAI.Core
             };
         }
 
-        public static Estimate GetMax(Estimate a, Estimate b)
+        public static Estimate Max(Estimate a, Estimate b)
         {
             return a > b
                 ? a
                 : b;
         }
 
-        public static Estimate GetMin(Estimate a, Estimate b)
+        public static Estimate Min(Estimate a, Estimate b)
         {
             return a < b
                 ? a
