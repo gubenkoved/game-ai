@@ -191,11 +191,6 @@ namespace GameAI.TicTacToe
                     previous = current;
                     counter = 1;
                 }
-
-                if (current == null)
-                {
-                    return null;
-                }
             }
 
             return null;

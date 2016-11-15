@@ -53,6 +53,7 @@
     <Compile Include="AlphaBetaTest.cs" />
     <Compile Include="BruteForceTest.cs" />
     <Compile Include="EstimateExtensions.cs" />
+    <Compile Include="EstimatorTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
