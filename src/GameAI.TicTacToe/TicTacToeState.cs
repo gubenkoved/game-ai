@@ -10,12 +10,15 @@ namespace GameAI.TicTacToe
     public class TicTacToeState : State
     {
         public readonly int Size;
-        private readonly bool?[] Board;
+        public readonly int ToWin;
 
-        public TicTacToeState(int size)
+        private readonly bool?[] _board;
+
+        public TicTacToeState(int size, int toWin)
         {
             Size = size;
-            Board = new bool?[size * size];
+            ToWin = toWin;
+            _board = new bool?[size * size];
         }
 
         public void SetCell(int x, int y, Player? player)
@@ -27,12 +30,12 @@ namespace GameAI.TicTacToe
                 val = (player == Player.Maximizing ? true : false);
             }
 
-            Board[y * Size + x] = val;
+            _board[y * Size + x] = val;
         }
 
         public Player? GetCell(int x, int y)
         {
-            bool? val = Board[y * Size + x];
+            bool? val = _board[y * Size + x];
 
             if (val == null)
             {

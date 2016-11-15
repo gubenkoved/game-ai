@@ -19,7 +19,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void CheckFirstMove()
         {
-            var game = new TicTacToeGame(3);
+            var game = TicTacToeGame.Classic;
 
             AIResult aiResult = _ai.Analyse(game);
             TicTacToeMove bestMove = aiResult.BestMove as TicTacToeMove;
@@ -54,7 +54,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void OneMoveToWinTheGame()
         {
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.State.SetCell(1, 1, Player.Maximizing);
             game.State.SetCell(2, 0, Player.Maximizing);
@@ -72,7 +72,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void CheckAfterBadFirstMove()
         {
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.DoMove(new TicTacToeMove()
             {
@@ -97,7 +97,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void EnsureMaximizingPlayerWinsAfterOpponentBadMove()
         {
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.DoMove(new TicTacToeMove()
             {
@@ -134,7 +134,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void EnsureMinimizingPlayerWinsAfterOpponentBadMove()
         {
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.DoMove(new TicTacToeMove(0, 1));
             game.DoMove(new TicTacToeMove(1, 1));
@@ -164,7 +164,7 @@ namespace GameAI.TicTacToe.Test
         [TestMethod]
         public void EnsureDrawGameWhenAIvsAI()
         {
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             int step = 1;
 
@@ -198,7 +198,7 @@ namespace GameAI.TicTacToe.Test
             // |x|o| |
             // -------
 
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.State.SetCell(0, 0, Player.Minimizing);
             game.State.SetCell(1, 0, Player.Maximizing);
@@ -230,7 +230,7 @@ namespace GameAI.TicTacToe.Test
             // -------
             // * -- expected next move
 
-            var game = new TicTacToeGame();
+            var game = TicTacToeGame.Classic;
 
             game.State.SetCell(0, 0, Player.Minimizing);
             game.State.SetCell(1, 0, Player.Maximizing);

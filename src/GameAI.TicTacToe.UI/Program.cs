@@ -1,4 +1,5 @@
 ﻿using GameAI.Core;
+using GameAI.Core.Engines.AlphaBeta;
 using GameAI.Core.Engines.BruteForce;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,14 @@ namespace GameAI.TicTacToe.UI
 {
     class Program
     {
+        private static AIEngine _ai = new AlphaBetaAIEngine()
+        {
+            MaxDepth = 8,
+        };
+
         static void Main(string[] args)
         {
-            var game = new TicTacToeGame();
+            var game = new TicTacToeGame(size: 5, toWin: 4);
 
             while (!game.State.IsTerminate)
             {
@@ -55,12 +61,11 @@ namespace GameAI.TicTacToe.UI
                     }
                 } else
                 {
-                    // ui move
-                    var ai = new BruteForceAIEngine();
+                    Console.WriteLine("Thinking...");
 
-                    AIResult aiMove = ai.Analyse(game);
+                    AIResult aiMove = _ai.Analyse(game);
 
-                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.BestMove}; MOVES CHKD: {ai.MovesChecked}");
+                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.BestMove}");
 
                     game.DoMove(aiMove.BestMove);
                 }

@@ -14,10 +14,21 @@ namespace GameAI.TicTacToe
         private TicTacToeEstimator _estimator;
 
         private int _n;
+        private int _toWin;
 
-        public TicTacToeGame(int size = 3)
+        #region Presets
+        public static TicTacToeGame Classic
         {
-            TicTacToeState initState = GetIntitialState(size);
+            get
+            {
+                return new TicTacToeGame(size: 3, toWin: 3);
+            }
+        }
+        #endregion
+
+        public TicTacToeGame(int size, int toWin)
+        {
+            TicTacToeState initState = GetIntitialState(size, toWin);
 
             Init2(initState);
         }
@@ -25,7 +36,11 @@ namespace GameAI.TicTacToe
         public override void Init2(TicTacToeState state)
         {
             _n = state.Size;
-            _estimator = new TicTacToeEstimator(_n);
+            _toWin = state.ToWin;
+
+            _estimator = new TicTacToeEstimator(
+                size: _n,
+                toWin: _toWin);
             
             State = state;
         }
@@ -48,9 +63,9 @@ namespace GameAI.TicTacToe
             }
         }
 
-        protected TicTacToeState GetIntitialState(int size)
+        protected TicTacToeState GetIntitialState(int size, int toWin)
         {
-            return new TicTacToeState(size)
+            return new TicTacToeState(size, toWin)
             {
                 StaticEstimate = Estimate.Zero,
                 NextMovePlayer = Player.Maximizing,
