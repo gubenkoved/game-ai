@@ -23,20 +23,27 @@ namespace GameAI.Core.Engines.AlphaBeta
             var result = new EngineResult();
 
             Metadata metadata = new Metadata();
+            Estimate estimate = default(Estimate);
 
-            Estimate estimate = FindImpl(
-                game: game,
-                alpha: Estimate.MinInf,
-                beta: Estimate.MaxInf,
-                depth: 1,
-                maxDepth: MaxDepth,
-                meta: metadata);
+            TimeSpan elapsed = Time.It(() =>
+            {
+                estimate = FindImpl(
+                    game: game,
+                    alpha: Estimate.MinInf,
+                    beta: Estimate.MaxInf,
+                    depth: 1,
+                    maxDepth: MaxDepth,
+                    meta: metadata);
+            });
 
             Debug.Assert(metadata.BestMove != null);
 
             result.BestMove = metadata.BestMove;
             result.Estimate = estimate;
+
             result.Metadata.MovesChecked = metadata.MovesChecked;
+            result.Metadata.ElapsedSec   = elapsed.TotalSeconds;
+            result.Metadata.Rate         = metadata.MovesChecked / elapsed.TotalSeconds;
 
             return result;
         }

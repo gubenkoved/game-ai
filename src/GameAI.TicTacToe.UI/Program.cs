@@ -65,7 +65,14 @@ namespace GameAI.TicTacToe.UI
 
                     EngineResult aiResult = _ai.Analyse(game);
 
-                    Console.WriteLine($"ESTIMATE: {aiResult.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiResult.BestMove}; CHECKED: {aiResult.Metadata.MovesChecked}");
+                    Console.WriteLine($"result: move {aiResult.BestMove}, estimate: {aiResult.Estimate}");
+
+                    Console.WriteLine();
+                    foreach (var key in aiResult.Metadata.Data.Keys)
+                    {
+                        Console.WriteLine($"  {key + ":", 16} {aiResult.Metadata.Data[key]}");
+                    }
+                    Console.WriteLine();
 
                     game.DoMove(aiResult.BestMove);
                 }

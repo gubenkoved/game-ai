@@ -9,20 +9,18 @@ namespace GameAI.Core.Engines
     public class Metadata
     {
         #region Data
-        public Dictionary<string, object> Data { get; private set; } = new Dictionary<string, object>(); 
+        public Dictionary<string, object> Data { get; private set; } = new Dictionary<string, object>();
         #endregion
 
         public int MovesChecked
         {
             get
             {
-                const string key = "moves-checked";
-                return Data.ContainsKey(key) ? (int)Data[key] : 0;
+                return Get<int>("moves-checked");
             }
             set
             {
-                const string key = "moves-checked";
-                Data[key] = value;
+                Set("moves-checked", value);
             }
         }
 
@@ -30,14 +28,43 @@ namespace GameAI.Core.Engines
         {
             get
             {
-                const string key = "elapsed-sec";
-                return Data.ContainsKey(key) ? (double)Data[key] : 0;
+                return Get<int>("elapsed-sec");
             }
             set
             {
-                const string key = "elapsed-sec";
-                Data[key] = value;
+                Set("elapsed-sec", value);
             }
         }
+
+        public double Rate
+        {
+            get
+            {
+                return Get<double>("rate");
+            }
+            set
+            {
+                Set("rate", value);
+            }
+        }
+
+        #region Private methods
+        private T Get<T>(string key)
+        {
+            if (Data.ContainsKey(key))
+            {
+                return (T)Data[key];
+            }
+            else
+            {
+                return default(T);
+            }
+        }
+
+        private void Set(string key, object value)
+        {
+            Data[key] = value;
+        } 
+        #endregion
     }
 }
