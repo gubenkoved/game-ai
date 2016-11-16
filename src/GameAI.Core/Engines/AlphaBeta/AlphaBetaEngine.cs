@@ -51,6 +51,7 @@ namespace GameAI.Core.Engines.AlphaBeta
         private Estimate FindImpl(Game game, Estimate alpha, Estimate beta, int depth, int maxDepth, Metadata meta)
         {
             Player player = game.State.NextMovePlayer;
+            bool isMax    = player == Player.Maximizing;
 
             if (maxDepth - depth == 0)
             {
@@ -70,92 +71,58 @@ namespace GameAI.Core.Engines.AlphaBeta
                 return terminateEstimate;
             }
 
-            if (player == Player.Maximizing)
+            Estimate v = isMax
+                ? Estimate.MinInf
+                : Estimate.MaxInf;
+
+            IEnumerable<Move> moves = game.GetAllowedMoves();
+
+            foreach (Move move in moves)
             {
-                // trying to get Alpha higher
-                // alpha will be MINIMAL possible outcome of the current position
-                // since it's MAXIMIZING player it will be MAX of all the estimates possible out of this position
+                meta.MovesChecked += 1;
 
-                Estimate v = Estimate.MinInf;
-
-                foreach (Move move in game.GetAllowedMoves())
+                using (DisposableMoveHandle.New(game, move))
                 {
-                    meta.MovesChecked += 1;
+                    Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, meta);
 
-                    using (DisposableMoveHandle.New(game, move))
+                    bool betterMoveFound = isMax
+                        ? curEstimate > v
+                        : curEstimate < v;
+
+                    if (betterMoveFound)
                     {
-                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, meta);
+                        v = curEstimate;
 
-                        if (curEstimate > v)
-                        {
-                            v = curEstimate;
+                        if (depth == 1)
+                            meta.BestMove = move;
+                    }
 
-                            if (depth == 1)
-                                meta.BestMove = move;
-                        }
-
+                    if (isMax)
+                    {
                         alpha = Estimate.Max(alpha, v);
-
-#if DEBUG
-                        if (depth <= 3)
-                        {
-                            Trace.WriteLine($"{ new string(' ', depth) } - Move {move} for {player} -- {curEstimate} -- Term? {game.State.IsTerminate}");
-                        }
-#endif
-
-                        if (alpha >= beta)
-                        {
-                            // beta cut-off
-                            //Trace.WriteLine($"Beta cut-off on depth {depth}");
-                            break;
-                        }
                     }
-                }
-
-                return v;
-            } else // MINIMIZING player
-            {
-                // the same as above rewritten for MIN player
-                // beta starts from +INF and gets lower
-
-                Estimate v = Estimate.MaxInf;
-
-                foreach (Move move in game.GetAllowedMoves())
-                {
-                    meta.MovesChecked += 1;
-
-                    using (DisposableMoveHandle.New(game, move))
+                    else
                     {
-                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, meta);
-
-                        if (curEstimate < v)
-                        {
-                            v = curEstimate;
-
-                            if (depth == 1)
-                                meta.BestMove = move;
-                        }
-
                         beta = Estimate.Min(beta, v);
+                    }
 
 #if DEBUG
-                        if (depth <= 3)
-                        {
-                            Trace.WriteLine($"{ new string(' ', depth) } - Move {move} for {player} -- {curEstimate} -- Term? {game.State.IsTerminate}");
-                        }
+                    if (depth <= 3)
+                    {
+                        Trace.WriteLine($"{ new string(' ', depth) } - Move {move} for {player} -- {curEstimate} -- Term? {game.State.IsTerminate}");
+                    }
 #endif
 
-                        if (alpha >= beta)
-                        {
-                            // alpha cut-off
-                            //Trace.WriteLine($"Alpha cut-off on depth {depth}");
-                            break;
-                        }
+                    if (alpha >= beta)
+                    {
+                        // alpha/beta cut-off
+                        //Trace.WriteLine($"cut-off on depth {depth}");
+                        break;
                     }
                 }
-
-                return v;
             }
+
+            return v;
         }
     }
 }
