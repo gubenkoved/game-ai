@@ -75,7 +75,9 @@ namespace GameAI.Core.Engines.AlphaBeta
                 ? Estimate.MinInf
                 : Estimate.MaxInf;
 
-            IEnumerable<Move> moves = game.GetAllowedMoves();
+            List<Move> moves = game.GetAllowedMoves()
+                .OrderByDescending(x => x.Priority)
+                .ToList();
 
             foreach (Move move in moves)
             {

@@ -65,12 +65,21 @@ namespace GameAI.TicTacToe.UI
 
                     EngineResult aiResult = _ai.Analyse(game);
 
-                    Console.WriteLine($"result: move {aiResult.BestMove}, estimate: {aiResult.Estimate}");
+                    Console.WriteLine($"result: move {aiResult.BestMove}, estimate {aiResult.Estimate}");
 
                     Console.WriteLine();
                     foreach (var key in aiResult.Metadata.Data.Keys)
                     {
-                        Console.WriteLine($"  {key + ":", 16} {aiResult.Metadata.Data[key]}");
+                        object valueObj = aiResult.Metadata.Data[key];
+
+                        string value;
+
+                        if (valueObj is double)
+                            value = ((double)valueObj).ToString("F3");
+                        else
+                            value = valueObj.ToString();
+
+                        Console.WriteLine($"  {key + ":", 16} {value}");
                     }
                     Console.WriteLine();
 
