@@ -12,7 +12,7 @@ namespace GameAI.TicTacToe.Test
     public class BruteForceTest : TestBase
     {
         public BruteForceTest()
-            :base(new BruteForceAIEngine())
+            :base(new BruteForceEngine())
         {
 
         }

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GameAI.Core
 {
-    public class AIResult
+    public abstract class Engine
     {
-        public Move BestMove;
-        public Estimate Estimate;
+        public abstract EngineResult Analyse(Game game);
     }
 }

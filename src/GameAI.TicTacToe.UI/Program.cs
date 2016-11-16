@@ -12,7 +12,7 @@ namespace GameAI.TicTacToe.UI
 {
     class Program
     {
-        private static AIEngine _ai = new AlphaBetaAIEngine()
+        private static Engine _ai = new AlphaBetaEngine()
         {
             MaxDepth = 8,
         };
@@ -63,11 +63,11 @@ namespace GameAI.TicTacToe.UI
                 {
                     Console.WriteLine("Thinking...");
 
-                    AIResult aiMove = _ai.Analyse(game);
+                    EngineResult aiResult = _ai.Analyse(game);
 
-                    Console.WriteLine($"ESTIMATE: {aiMove.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiMove.BestMove}");
+                    Console.WriteLine($"ESTIMATE: {aiResult.Estimate}; BEST MOVE FOR {game.State.NextMovePlayer}: {aiResult.BestMove}; CHECKED: {aiResult.Metadata.MovesChecked}");
 
-                    game.DoMove(aiMove.BestMove);
+                    game.DoMove(aiResult.BestMove);
                 }
             }
 

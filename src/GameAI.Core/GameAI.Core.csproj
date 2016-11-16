@@ -40,11 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIEngine.cs" />
-    <Compile Include="Engines\AlphaBeta\AlphaBetaAIEngine.cs" />
-    <Compile Include="Engines\BruteForce\BruteForceAIEngine.cs" />
+    <Compile Include="Engines\Engine.cs" />
+    <Compile Include="Engines\AlphaBeta\AlphaBetaEngine.cs" />
+    <Compile Include="Engines\BruteForce\BruteForceEngine.cs" />
+    <Compile Include="Engines\Metadata.cs" />
     <Compile Include="Estimate.cs" />
-    <Compile Include="AIResult.cs" />
+    <Compile Include="Engines\EngineResult.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="Player.cs" />

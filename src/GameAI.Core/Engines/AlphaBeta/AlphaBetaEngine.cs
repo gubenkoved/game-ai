@@ -8,13 +8,21 @@ using System.Threading.Tasks;
 
 namespace GameAI.Core.Engines.AlphaBeta
 {
-    public class AlphaBetaAIEngine : AIEngine
+    public class AlphaBetaEngine : Engine
     {
+        private class Metadata
+        {
+            public Move BestMove;
+            public int MovesChecked;
+        }
+
         public int MaxDepth { get; set; } = 10;
 
-        public override AIResult Analyse(Game game)
+        public override EngineResult Analyse(Game game)
         {
-            Move move = null;
+            var result = new EngineResult();
+
+            Metadata metadata = new Metadata();
 
             Estimate estimate = FindImpl(
                 game: game,
@@ -22,18 +30,18 @@ namespace GameAI.Core.Engines.AlphaBeta
                 beta: Estimate.MaxInf,
                 depth: 1,
                 maxDepth: MaxDepth,
-                bestMove: ref move);
+                meta: metadata);
 
-            Debug.Assert(move != null);
+            Debug.Assert(metadata.BestMove != null);
 
-            return new AIResult()
-            {
-                BestMove = move,
-                Estimate = estimate,
-            };
+            result.BestMove = metadata.BestMove;
+            result.Estimate = estimate;
+            result.Metadata.MovesChecked = metadata.MovesChecked;
+
+            return result;
         }
 
-        private Estimate FindImpl(Game game, Estimate alpha, Estimate beta, int depth, int maxDepth, ref Move bestMove)
+        private Estimate FindImpl(Game game, Estimate alpha, Estimate beta, int depth, int maxDepth, Metadata meta)
         {
             Player player = game.State.NextMovePlayer;
 
@@ -65,16 +73,18 @@ namespace GameAI.Core.Engines.AlphaBeta
 
                 foreach (Move move in game.GetAllowedMoves())
                 {
+                    meta.MovesChecked += 1;
+
                     using (DisposableMoveHandle.New(game, move))
                     {
-                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
+                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, meta);
 
                         if (curEstimate > v)
                         {
                             v = curEstimate;
 
                             if (depth == 1)
-                                bestMove = move;
+                                meta.BestMove = move;
                         }
 
                         alpha = Estimate.Max(alpha, v);
@@ -105,16 +115,18 @@ namespace GameAI.Core.Engines.AlphaBeta
 
                 foreach (Move move in game.GetAllowedMoves())
                 {
+                    meta.MovesChecked += 1;
+
                     using (DisposableMoveHandle.New(game, move))
                     {
-                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, ref bestMove);
+                        Estimate curEstimate = FindImpl(game, alpha, beta, depth + 1, maxDepth, meta);
 
                         if (curEstimate < v)
                         {
                             v = curEstimate;
 
                             if (depth == 1)
-                                bestMove = move;
+                                meta.BestMove = move;
                         }
 
                         beta = Estimate.Min(beta, v);

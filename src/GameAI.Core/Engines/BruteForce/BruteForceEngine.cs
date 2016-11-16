@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace GameAI.Core.Engines.BruteForce
 {
-    public class BruteForceAIEngine : AIEngine
+    public class BruteForceEngine : Engine
     {
         public int MaxDepth = 10;
 
         public int MovesChecked = 0;
 
-        public override AIResult Analyse(Game game)
+        public override EngineResult Analyse(Game game)
         {
             MovesChecked = 0;
 
@@ -24,7 +24,7 @@ namespace GameAI.Core.Engines.BruteForce
 
             Trace.WriteLine($"Moves checked: {MovesChecked}");
 
-            return new AIResult()
+            return new EngineResult()
             {
                 Estimate = bestEstimate,
                 BestMove = bestMove,

@@ -8,10 +8,10 @@ namespace GameAI.TicTacToe.Test
 {
     public abstract class TestBase
     {
-        protected AIEngine _ai;
+        protected Engine _ai;
 
 
-        public TestBase(AIEngine ai)
+        public TestBase(Engine ai)
         {
             _ai = ai;
         }
@@ -21,7 +21,7 @@ namespace GameAI.TicTacToe.Test
         {
             var game = TicTacToeGame.Classic;
 
-            AIResult aiResult = _ai.Analyse(game);
+            EngineResult aiResult = _ai.Analyse(game);
             TicTacToeMove bestMove = aiResult.BestMove as TicTacToeMove;
 
             Assert.IsNotNull(aiResult);
@@ -61,7 +61,7 @@ namespace GameAI.TicTacToe.Test
 
             game.State.NextMovePlayer = Player.Maximizing;
 
-            AIResult aiResult = _ai.Analyse(game);
+            EngineResult aiResult = _ai.Analyse(game);
 
             TicTacToeMove bestMove = aiResult.BestMove as TicTacToeMove;
 
@@ -117,7 +117,7 @@ namespace GameAI.TicTacToe.Test
             // play as AI wants till the end
             while (!game.State.IsTerminate)
             {
-                AIResult aiResult = _ai.Analyse(game);
+                EngineResult aiResult = _ai.Analyse(game);
 
                 game.DoMove(aiResult.BestMove);
 
@@ -147,7 +147,7 @@ namespace GameAI.TicTacToe.Test
             // play as AI wants till the end
             while (!game.State.IsTerminate)
             {
-                AIResult aiResult = _ai.Analyse(game);
+                EngineResult aiResult = _ai.Analyse(game);
 
                 game.DoMove(aiResult.BestMove);
 
@@ -173,7 +173,7 @@ namespace GameAI.TicTacToe.Test
             {
                 Trace.WriteLine($"Step #{step}...");
 
-                AIResult aiResult = _ai.Analyse(game);
+                EngineResult aiResult = _ai.Analyse(game);
 
                 game.DoMove(aiResult.BestMove);
 
@@ -244,7 +244,7 @@ namespace GameAI.TicTacToe.Test
 
             game.State.NextMovePlayer = Player.Minimizing;
 
-            AIResult aiResult = _ai.Analyse(game);
+            EngineResult aiResult = _ai.Analyse(game);
 
             Assert.AreEqual(Estimate.Zero, aiResult.Estimate, "it should be draw game estimate");
 

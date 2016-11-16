@@ -12,7 +12,7 @@ namespace GameAI.TicTacToe.Test
     public class AlphaBetaTest : TestBase
     {
         public AlphaBetaTest()
-            : base(new AlphaBetaAIEngine())
+            : base(new AlphaBetaEngine())
         {
 
         }
