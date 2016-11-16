@@ -55,12 +55,34 @@ namespace GameAI.TicTacToe
                     {
                         yield return new TicTacToeMove()
                         {
-                            X = x,
-                            Y = y,
+                            X        = x,
+                            Y        = y,
+                            Priority = GetPositionPriority(x, y),
                         };
                     }
                 }
             }
+        }
+
+        private int GetPositionPriority(int x, int y)
+        {
+            // just calculate amount of marks around
+            // more marks -- more priority
+
+            int priority = 0;
+
+            if (x - 1 > 0 && y - 1 > 0 && State.GetCell(x - 1, y - 1) != null) priority += 1;
+            if (x - 1 > 0 && State.GetCell(x - 1, y) != null) priority += 1;
+            if (x - 1 > 0 && y + 1 < _n && State.GetCell(x - 1, y + 1) != null) priority += 1;
+
+            if (y - 1 > 0 && State.GetCell(x, y - 1) != null) priority += 1;
+            if (y + 1 < _n && State.GetCell(x, y + 1) != null) priority += 1;
+
+            if (x + 1 < _n && y - 1 > 0 && State.GetCell(x + 1, y - 1) != null) priority += 1;
+            if (x + 1 < _n && State.GetCell(x + 1, y) != null) priority += 1;
+            if (x + 1 < _n && y + 1 < _n && State.GetCell(x + 1, y + 1) != null) priority += 1;
+
+            return priority;
         }
 
         protected TicTacToeState GetIntitialState(int size, int toWin)
